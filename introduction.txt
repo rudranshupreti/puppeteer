@@ -1,0 +1,22 @@
+-> it is Node.js library that provide a high level api control and automation 
+-> it is developed by chrome team at google and use as scraping ,automation testing etc 
+-> it support headless and head mode while running 
+-> it is integrayed with popular testing famework like jest and mocha 
+
+---> Installation = "npm install puppeteer"
+
+@ to takr a ss of google landing page 
+const puppeteer = require("puppeteer");
+
+(async () => {
+  try {
+    const browser = await puppeteer.launch({headless:false});// if i want to see browser open
+    const page = await browser.newPage(); // to open newpage 
+    await page.goto('https://google.com'); //to open that url
+    await page.screenshot({path: 'google.png'}); // to take ss of that 
+    (await browser).close();//close 
+  }
+catch(err){console.log(err);
+
+}}
+)();******use of empty colum

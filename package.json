@@ -1,0 +1,21 @@
+{
+  "name": "puppeteer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chai": "^5.1.1",
+    "crawler": "^2.0.2",
+    "csv-writer": "^1.6.0",
+    "json2csv": "^6.0.0-alpha.2",
+    "mocha": "^10.7.3",
+    "node": "^22.7.0",
+    "puppeteer": "^23.2.1",
+    "puppeteer-core": "^23.2.1"
+  }
+}
