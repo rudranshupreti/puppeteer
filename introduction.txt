@@ -44,3 +44,25 @@ async function run(){
 
 }
 run();
+
+
+@ Customize launch options: pass an option as an argument to launch() method to 
+ Customize the behavior of browser
+
+ const option = {
+    executablepath //path to browser executable
+    headless //run the browser in headess mode (true) or display the browser window (false)
+    slowMo //delay (in milliseconds) betwen puppeteer operators
+    defaultVeiwport {with:22.height:23}// set a custom Veiwport size for browser
+    aegs ['--no-sandbox','--disable-setuid-sandbox'],//array of default command-line argumet to pass to tha browser 
+    ignoreDefaultArugs [--disable-extention]//array of default command- line argument to exclude
+    userDataDir //path to tha user data directoy of president browser state 
+    ignoreHttpsErrors :false// ignore https ignore Https Errors during navigation 
+    handleSIGIT: true // close the browser when receving a SIGINT singnal (cntrl+c)
+    handleSIGTERT: true // close the browser when receving a SIGTERM singnal 
+    handleSIGHUP: true // close the browser when receving a SIGHUP singnal
+    timeout: 0 // maximum time in milliseconds to wait for the instance to start
+    dimpio : fALSE ,//whether to pipe the browser process stdout and stderr to the parnet process
+    env:{} // enviernmment variable to passed to browser process
+    devtolls: false // ehather to auto-open devtool panel for eah tab
+    
