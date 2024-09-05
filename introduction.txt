@@ -104,3 +104,49 @@ async function run(){
 }
 
 run();
+
+
+@ scrap seo data 
+   const puppeteer = require("puppeteer");
+  const fs = require("fs");
+
+  async function  run() {
+   const browser = await puppeteer.launch({headless:false});
+   const page = await browser.newPage();
+    // navigate 
+    await page.goto("https://yahoo.com");
+    
+    // SEO related data 
+    const title = await page.title();
+    const metaDescription = await page.$eval('meta[name="description"]' , (element) => element.textContent);
+    const metaKeywords = await page.$eval('meta[name="keywords"]',(element) => element.textContent); 
+
+    //extract links
+    const links = await page.$$eval("a",(elements) =>
+        elements.map((elements) => ({
+        href: elements.href,
+        text: elements.textContent,
+    }))
+    );
+    const linksCount = links.length;
+
+    // output
+    const outputData ={
+        title,
+        metaDescription,
+        metaKeywords,
+        links,
+        linksCount,
+    };
+
+    // json into string
+    const outputJSON = JSON.stringify(outputData);
+
+    // write the file
+    fs.writeFileSync("output.json", outputJSON);
+
+    await browser.close();
+
+  }
+
+  run();
