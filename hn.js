@@ -1,4 +1,4 @@
-
+@ generateScreeshot
 const puppeteer = require("puppeteer");
  async function generateScreeshot(url,outputPath) {
 

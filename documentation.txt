@@ -1,0 +1,209 @@
+-> it is Node.js library that provide a high level api control and automation 
+-> it is developed by chrome team at google and use as scraping ,automation testing etc 
+-> it support headless and head mode while running 
+-> it is integrayed with popular testing famework like jest and mocha 
+
+---> Installation = "npm install puppeteer"
+
+@ to takr a ss of google landing page 
+const puppeteer = require("puppeteer");
+
+(async () => {
+  try {
+    const browser = await puppeteer.launch({headless:false});// if i want to see browser open
+    const page = await browser.newPage(); // to open newpage 
+    await page.goto('https://google.com'); //to open that url
+    await page.screenshot({path: 'google.png'}); // to take ss of that 
+    (await browser).close();//close 
+  }
+catch(err){console.log(err);
+
+}}
+)();******use of empty colum
+
+
+@ scraping h1  element in yahoo and buid a pdf of that page 
+
+
+const puppeteer = require("puppeteer");
+
+
+async function run(){
+  // to launch the browser intance 
+
+  const browser = await puppeteer.launch ({headless:false});// always us await function with puppeteer because we have wait before run this 
+  const page = await browser.newPage();
+  await page.goto("https://yahoo.com");
+  const title = await page.title();// to bring out the title of the web page 
+  console.log(title);
+  const heading = await page.$eval('p',(element) => element.TextContent);// $eval if it funtion to evaluat the web page and do some task 
+  await page.pdf({path:'google1.pdf',format:'A4'}); //use to get pdf 
+  await browser.close();
+
+     
+
+}
+run();
+
+
+@ Customize launch options: pass an option as an argument to launch() method to 
+ Customize the behavior of browser
+
+ const option = {
+    executablepath //path to browser executable
+    headless //run the browser in headess mode (true) or display the browser window (false)
+    slowMo //delay (in milliseconds) betwen puppeteer operators
+    defaultVeiwport {with:22.height:23}// set a custom Veiwport size for browser
+    aegs ['--no-sandbox','--disable-setuid-sandbox'],//array of default command-line argumet to pass to tha browser 
+    ignoreDefaultArugs [--disable-extention]//array of default command- line argument to exclude
+    userDataDir //path to tha user data directoy of president browser state 
+    ignoreHttpsErrors :false// ignore https ignore Https Errors during navigation 
+    handleSIGIT: true // close the browser when receving a SIGINT singnal (cntrl+c)
+    handleSIGTERT: true // close the browser when receving a SIGTERM singnal 
+    handleSIGHUP: true // close the browser when receving a SIGHUP singnal
+    timeout: 0 // maximum time in milliseconds to wait for the instance to start
+    dimpio : fALSE ,//whether to pipe the browser process stdout and stderr to the parnet process
+    env:{} // enviernmment variable to passed to browser process
+    devtolls: false // ehather to auto-open devtool panel for eah tab
+    
+
+@ Navigation  & Extract form web page 
+
+  const puppeteer = require("puppeteer");
+
+async function run(){
+    const browser = await puppeteer.launch({headless:false});
+    const page = await browser.newPage();
+
+    //navigate to page 
+    await page.goto("https://google.com");
+    // extract image from web page 
+    const image = await page.$$eval("img",(elements) =>
+        elements.map((elements) =>({
+            src: elements.src,
+            alt: elements.alt,
+        }))
+    );
+
+    // extract link
+    const links = await page.$$eval("a",(elements) =>
+        elements.map((elements) => ({
+        href: elements.href,
+        text: elements.textContent,
+    }))
+    );
+    const imageCount = image.lenght;
+    const linksCount = links.lenght;
+
+    // output of the above
+    const output = JSON.stringify({image, links, imageCount, linksCount});
+     console.log(output);
+
+    // close the browser
+    await browser.close();
+}
+
+run();
+
+
+@ scrap seo data 
+   const puppeteer = require("puppeteer");
+  const fs = require("fs");
+
+  async function  run() {
+   const browser = await puppeteer.launch({headless:false});
+   const page = await browser.newPage();
+    // navigate 
+    await page.goto("https://yahoo.com");
+    
+    // SEO related data 
+    const title = await page.title();
+    const metaDescription = await page.$eval('meta[name="description"]' , (element) => element.textContent);
+    const metaKeywords = await page.$eval('meta[name="keywords"]',(element) => element.textContent); 
+
+    //extract links
+    const links = await page.$$eval("a",(elements) =>
+        elements.map((elements) => ({
+        href: elements.href,
+        text: elements.textContent,
+    }))
+    );
+    const linksCount = links.length;
+
+    // output
+    const outputData ={
+        title,
+        metaDescription,
+        metaKeywords,
+        links,
+        linksCount,
+    };
+
+    // json into string
+    const outputJSON = JSON.stringify(outputData);
+
+    // write the file
+    fs.writeFileSync("output.json", outputJSON);
+
+    await browser.close();
+
+  }
+
+  run();
+
+@ generating PDF
+
+const puppeteer = require("puppeteer");
+ 
+async function generatePDF(url,outputfile){
+    try {
+        // launch browsser
+        const browser = await puppeteer.launch({headless: false});
+        const page = await browser.newPage();
+        await page.goto("https://google.com");
+
+        //generate pdf
+        await page.pdf({path:outputfile,format:'A4'});
+
+        //close browser
+        await browser.close();
+
+
+    }
+    catch(err){
+        console.log(err);
+
+    }
+}
+const url = "https://google.com";
+const outputfile = "output.pdf"
+
+generatePDF(url,outputfile);
+
+@ generateScreeshot
+const puppeteer = require("puppeteer");
+ async function generateScreeshot(url,outputPath) {
+
+
+    try {
+        const browser = await puppeteer.launch({headless:false});
+        const page = await browser.newPage();
+
+        await page.goto(url);
+         await page.screenshot({path:outputPath});
+        
+         await browser.close();
+         console.log('Screenshot is genrated successfully');
+
+    }
+    catch(err){
+        console.log("unable to take");
+    }
+    
+ }
+
+ const url = "https://google.com";
+ const outputPath = "google-ss.png";
+
+ generateScreeshot(url,outputPath);
+
