@@ -150,3 +150,60 @@ run();
   }
 
   run();
+
+@ generating PDF
+
+const puppeteer = require("puppeteer");
+ 
+async function generatePDF(url,outputfile){
+    try {
+        // launch browsser
+        const browser = await puppeteer.launch({headless: false});
+        const page = await browser.newPage();
+        await page.goto("https://google.com");
+
+        //generate pdf
+        await page.pdf({path:outputfile,format:'A4'});
+
+        //close browser
+        await browser.close();
+
+
+    }
+    catch(err){
+        console.log(err);
+
+    }
+}
+const url = "https://google.com";
+const outputfile = "output.pdf"
+
+generatePDF(url,outputfile);
+
+@ generateScreeshot
+const puppeteer = require("puppeteer");
+ async function generateScreeshot(url,outputPath) {
+
+
+    try {
+        const browser = await puppeteer.launch({headless:false});
+        const page = await browser.newPage();
+
+        await page.goto(url);
+         await page.screenshot({path:outputPath});
+        
+         await browser.close();
+         console.log('Screenshot is genrated successfully');
+
+    }
+    catch(err){
+        console.log("unable to take");
+    }
+    
+ }
+
+ const url = "https://google.com";
+ const outputPath = "google-ss.png";
+
+ generateScreeshot(url,outputPath);
+
