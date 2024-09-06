@@ -207,3 +207,67 @@ const puppeteer = require("puppeteer");
 
  generateScreeshot(url,outputPath);
 
+@ getting sourse code of website
+const puppeteer =require("puppeteer");
+const fs = require("fs");
+
+async function getSourceCode(url,outputData){
+    try{
+        const browser = await puppeteer.launch({headless:false});
+        const page = await browser.newPage();
+
+        await page.goto(url);
+        
+        const sourceCode = await page.content();
+
+        fs.writeFileSync(outputData,sourceCode,"utf-8");
+
+        await browser.close()
+         console.log("successfully executed");
+
+
+    }
+     catch(er){
+        console.log("not executed");
+
+     }
+}
+
+const url =" https://google.com";
+const outputData = "source-code.html";
+ getSourceCode(url,outputData);
+
+@interceptRequest in website
+
+const puppeteer = require("puppeteer");
+
+async function interceptRequest(url){
+    try {
+        const browser = await puppeteer.launch({headless:false});
+        const page = await browser.newPage();
+        await page.setRequestInterception(true);
+
+    // logic for intercept
+    page.on('request', (interceptRequest) => {
+        if (
+            interceptRequest.url().endsWith('.png')){
+                interceptRequest.abort();
+                console.log("request abort");
+
+            }
+        else{
+            interceptRequest.headers({'secretKet':'abc123'});
+            interceptRequest.continue();
+            console.log("request continued wiht header");
+        }
+    });
+    
+    await page.goto(url);
+    await browser.close();
+}
+catch(err){
+    console.log("error");
+}
+
+}
+interceptRequest('https://yahoo.com')
