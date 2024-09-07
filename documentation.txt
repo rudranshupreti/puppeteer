@@ -365,3 +365,179 @@ async function disableJavascript(url){
     }
 }
 disableJavascript('https://example.com')
+
+@ highlighting the link in web page
+
+ const puppeteer = require('puppeteer');
+ async function highlightLinks(url) {
+
+    try {
+        const browser = await puppeteer.launch({headless:false});
+        const page = await browser.newPage();
+
+        await page.goto(url);
+
+        await page.screenshot({path: 'visualpage.png'});
+         await page.evaluate(()  =>{
+            const link = document.querySelectorAll('a');
+
+            link.forEach(link => {
+                link.style.border = '2xp solid red';
+                link.style.backgroundColor = "yellow";
+            });
+
+            });
+         await page.screenshot({path:'updatelink.png'});
+         await browser.close();
+        
+    }
+
+    catch(e){
+        console.log('unable to do');
+    }
+    
+ }
+ highlightLinks('https://example.com');
+
+ @ check broken link
+ const puppeteer = require('puppeteer');
+ async function checkBrokenlinks(url) {
+    
+    try{
+        const browser = await puppeteer.launch({headless:false});
+        const page = await browser.newPage(url);
+
+        await page.goto(url);
+        
+        const links = await page.$$eval('a', anchor => anchor.map(a => a.href));
+
+        const Brokenlinks = [];
+        
+        for(const link of links){
+            const response = await page.goto(link,{waitUntil:'networkidle0',timeout:5000});
+            if(response.status() >= 4000){
+                Brokenlinks.push({link, status: response.status});
+                console.log("broken links",Brokenlinks);
+                await browser.close();            }
+
+            }}
+            
+            catch(e){
+                console.log('unsble to check ',e);
+
+            }
+        
+ }
+
+ checkBrokenlinks('https://example.com');
+
+@ finding the element using puppeteer
+const puppeteer = require("puppeteer");
+
+async function checkElementPresent(url, elements) {
+    try {
+        const browser = await puppeteer.launch({ headless: false });
+        const page = await browser.newPage();
+
+        await page.goto(url);
+
+        const presenceResults = {};
+
+        for (const element of elements) {
+            const foundElements = await page.$$(element);
+            presenceResults[element] = foundElements.length > 0;
+        }
+
+        console.log("Element presence results:", presenceResults);
+        await browser.close();
+    } catch (e) {
+        console.log("Unable to check element in URL:", e);
+    }
+}
+
+const elements = [".header", "#main-content", "footer"];
+checkElementPresent('https://google.com', elements);
+
+@ extract and prese sitemaping
+const puppeteer = require('puppeteer');
+const asios = require("axios");
+const {parseStringPromise} = require("xml2js");
+const fs = require("fs");
+const { default: axios } = require('axios');
+
+async function extactDataFromSitemap(sitemapURL){
+    try{
+
+        const reponse = await axios.get(sitemapURL);
+        const sitemap = reponse.data;
+        console.log(sitemap);
+
+    }
+    catch(e){
+        console.log("unable to find");
+    }
+}
+
+const sitemapURL = 'https://yoast.com/page-sitemap.xml';
+extactDataFromSitemap(sitemapURL);
+
+@   const puppeteer = require('puppeteer');
+const asios = require("axios");
+const {parseStringPromise} = require("xml2js");
+const fs = require("fs");
+const { default: axios } = require('axios');
+
+async function extactDataFromSitemap(sitemapURL){
+    try{
+
+        const reponse = await axios.get(sitemapURL);
+        const sitemap = reponse.data;
+
+        const parsedXML = await parseStringPromise(sitmap);
+        const url = parsedXML.urlset.url.map(url=> url.loc[0];)
+        
+        console.log(sitemap);
+
+    }
+    catch(e){
+        console.log("unable to find");
+    }
+}
+
+const sitemapURL = 'https://yoast.com/page-sitemap.xml';
+extactDataFromSitemap(sitemapURL);
+@ navigation using puppeteer
+const puppeteer = require("puppeteer");
+
+(async () => {
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    await page.goto("https://yahoo.com");
+    await page.goto("https://finance.yahoo.com");
+
+    await page.goBack();
+    // operation here
+    const title = await page.title();  // Changed `:` to `;`
+    console.log(title);
+
+    await page.goForward();
+    await browser.close();
+})();
+@ to set geological location
+const puppeteer = require("puppeteer");
+
+(async () =>{
+    const browser = await puppeteer.launch({headless:false});
+
+const page = await browser.newPage();
+
+const latitude = 37.344;
+const longitude = 122.324;
+await page.browserContext().overridePermissions('https;//example.com', ['geolocation']);
+await page.setGeolocation({latitude,longitude});
+await page.goto('https://example.com');
+await  page.screenshot({path: 'geological.png'}
+);
+await browser.close();
+})();
