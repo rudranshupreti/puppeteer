@@ -271,3 +271,39 @@ catch(err){
 
 }
 interceptRequest('https://yahoo.com')
+
+@ set viwepoint
+const puppeteer = require("puppeteer");
+
+async function simulateMobileDevice() {
+    const browser = await puppeteer.launch({headless:false});
+    const page = await browser.newPage();
+
+    await page.setUserAgent('Mozilla/5.0 (iphone; cpu  iphone os 11_0 like mac OS X 10');
+    await page.setViewport({width:140,height:1200});
+    await page.goto("https://yahoo.com");
+
+    await browser.close();
+
+    
+}
+
+simulateMobileDevice();
+
+@ emulater using puppeteer
+
+const puppeteer = require('puppeteer');
+const Device = puppeteer.KnownDevices['iPhone 13 Pro'];  // Replace with a valid device name
+
+(async () => {
+    const browser = await puppeteer.launch({headless: false});
+    const page = await browser.newPage();
+
+    await page.emulate(Device);
+    await page.goto('https://yahoo.com');
+
+    await page.screenshot({path: 'iphone13.png'});
+
+    await browser.close();
+})();
+
