@@ -307,3 +307,61 @@ const Device = puppeteer.KnownDevices['iPhone 13 Pro'];  // Replace with a valid
     await browser.close();
 })();
 
+@ coverage of CSS
+ const puppeteer = require('puppeteer');
+
+(async () => {
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+
+    await Promise.all([
+        page.coverage.startJSCoverage(),
+        page.coverage.startCSSCoverage()
+    ]);
+
+    await page.goto('https://example.com');
+
+    const [JSCoverage, cssCoverage] = await Promise.all([
+        page.coverage.stopJSCoverage(),
+        page.coverage.stopCSSCoverage()
+    ]);
+
+    let totalBytes = 0;
+    let usedBytes = 0;
+
+    for (const entry of cssCoverage) {
+        totalBytes += entry.text.length;
+        for (const range of entry.ranges) {
+            usedBytes += range.end - range.start;
+        }
+    }
+
+    console.log('Total Bytes:', totalBytes);
+    console.log('Used Bytes:', usedBytes);
+
+    await browser.close();
+})();
+
+@ disable javasript
+
+const puppeteer = require('puppeteer');
+ 
+async function disableJavascript(url){
+    try{
+        const browser = await puppeteer.launch({headless:false});
+        console.log("js disabled");
+        const page = await browser.newPage();
+
+
+        // Disable javascript
+        await page.setJavaScriptEnabled(false);
+        await page.goto(url);
+
+        //perform some operation
+        await browser.close();
+    }
+    catch(e){
+        console.log('error',e)
+    }
+}
+disableJavascript('https://example.com')
